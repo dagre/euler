@@ -13,15 +13,11 @@ object Euler4 {
 
   def apply(minMultiplicand: Long, maxMultiplicand: Long): Long = {
     var maxPalindrome = 0L
-    var maxL = 0L
-    var maxR = 0L
     for (l <- minMultiplicand to maxMultiplicand)
       for (r <- l to maxMultiplicand) {
         val mult = l * r
         if (isPalindrome(mult) && mult > maxPalindrome) {
           maxPalindrome = mult
-          maxL = l
-          maxR = r
         }
       }
 
