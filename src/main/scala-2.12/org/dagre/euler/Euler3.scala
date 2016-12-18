@@ -17,35 +17,10 @@ object Euler3BruteForce {
 
     // Brute force - find all prime factors between 2 and sqrt(n)
     val target = Math.round(Math.sqrt(num))
-    2L until target filter isFactor filter isPrime
+    2L until target filter isFactor filter Utils.isPrime
   }
 
   def isDivisible(num: Long, divisor: Long): Boolean = num % divisor == 0
-
-  /**
-    * All primes are of the form 6k+1 or 6k-1 (Any number can be represented
-    * as 6k + n (0 <= n <= 5) - of these 6k, 6k+2, 6k+3, 6k+4 are divisible
-    * by 2 or 3 always, hence they are not prime, which leaves 6k+1 and 6k+5
-    * (== 6(k+1)-1) as potential primes). This method uses this information
-    * to check if a number is prime.
-    * Adapted from http://stackoverflow.com/a/1801446/2868061
-    */
-  def isPrime(n: Long): Boolean = {
-    if (n == 2) return true
-    if (n == 3) return true
-    if (isDivisible(n, 2)) return false
-    if (isDivisible(n, 3)) return false
-
-    var i = 5L
-    var w = 2L
-    while (i*i <= n) {
-      if (isDivisible(n, i)) return false
-      i += w
-      w = 6-w
-    }
-
-    true
-  }
 }
 
 /**
