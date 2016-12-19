@@ -23,7 +23,5 @@ object Euler9 {
     products.head
   }
 
-  def isPythagoreanTriplet(a: Int, b: Int, c: Int): Boolean = {
-    (a*a) + (b*b) == (c*c)
-  }
+  def isPythagoreanTriplet(a: Int, b: Int, c: Int): Boolean = (a*a) + (b*b) == (c*c)
 }
