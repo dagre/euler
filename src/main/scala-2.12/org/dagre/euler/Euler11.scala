@@ -36,22 +36,29 @@ object Euler11 {
 
   def apply(numAdjacentNumbers: Int, grid: List[List[Int]]): Long = {
     var max: Long = 0
-    for (x <- 0 to grid.length - numAdjacentNumbers)
-      for (y <- 0 to grid(x).length - numAdjacentNumbers) {
-        val productAlongY = grid(x).view(y, y + numAdjacentNumbers).product
-        val productAlongX = grid.view(x, x + numAdjacentNumbers).map(inner => inner(y)).product
-        // diagonal being e.g. (0,0) * (1,1) * (2,2)
-        val productAlongDiagonal = grid.view(x, x + numAdjacentNumbers).zipWithIndex.map(t => t._1(y + t._2)).product
-        // opposite diagonal being e.g. (0,2) * (1,1) * (2,0)
-        val productAlongOppositeDiagonal =
-          // only consider the reverse diagonal if we are far enough into the list
-          // we check against numAdjacentNumbers-1 since we start from index 0
-          // e.g. if we are looking for 3 numbers, we need to start checking at (2,2) = (2,0)*(1,1)*(0,2)
-          if (x >= numAdjacentNumbers-1 && y >= numAdjacentNumbers-1)
-            grid.view(x - numAdjacentNumbers, x).zipWithIndex.map(t => t._1(y - t._2)).product
-          else 0
+    for (x <- grid.indices)
+      for (y <- grid(x).indices) {
+        var products = List[Long]()
 
-        val maxProduct = List(productAlongY, productAlongX, productAlongDiagonal, productAlongOppositeDiagonal).max
+        // Get the product along x if we have enough elements left along x
+        if (x <= grid.length - numAdjacentNumbers)
+          products ::= grid.view(x, x + numAdjacentNumbers).map(inner => inner(y)).product
+
+        // Get the product along y if we have enough elements left along y
+        if (y <= grid.length - numAdjacentNumbers)
+          products ::= grid(x).view(y, y + numAdjacentNumbers).product
+
+        // Get the product along the diagonal if we have enough elements left along x and y
+        // diagonal being e.g. (0,0) * (1,1) * (2,2)
+        if (x <= grid.length - numAdjacentNumbers && y <= grid.length - numAdjacentNumbers)
+          products ::= grid.view(x, x + numAdjacentNumbers).zipWithIndex.map(t => t._1(y + t._2)).product
+
+        // Get the product along the opposite diagonal if we have traversed enough elements along x and y
+        // opposite diagonal being e.g. (0,2) * (1,1) * (2,0)
+        if (x >= numAdjacentNumbers-1 && y >= numAdjacentNumbers-1)
+          products ::= grid.view(x - numAdjacentNumbers, x).zipWithIndex.map(t => t._1(y - t._2)).product
+
+        val maxProduct = if (products.isEmpty) 0 else products.max
         max = if (maxProduct > max) maxProduct else max
       }
 
