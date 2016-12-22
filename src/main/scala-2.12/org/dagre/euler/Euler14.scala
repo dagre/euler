@@ -20,12 +20,11 @@ package org.dagre.euler
   * @author daniel.grech
   */
 object Euler14 {
-  def apply(max: Int): Long = {
-    def chainLength(collatzSequence: Stream[Long]): Long =
-      collatzSequence.size + 1 // we stop at the first '1', so add one more to count for the 1 at the end
-
-    def collatzSequence(n: Long): Stream[Long] = Stream.iterate(n)(v => if (v % 2 == 0) v / 2 else (3 * v) + 1).takeWhile(_ != 1)
-
+  def apply(max: Int): Int =
     (1 until max).toStream.map(n => (n, chainLength(collatzSequence(n)))).maxBy(pair => pair._2)._1
-  }
+
+  def chainLength(collatzSequence: Stream[Long]): Long =
+    collatzSequence.size + 1 // we stop at the first '1', so add one more to count for the 1 at the end
+
+  def collatzSequence(n: Long): Stream[Long] = Stream.iterate(n)(v => if (v % 2 == 0) v / 2 else (3 * v) + 1).takeWhile(_ != 1)
 }
