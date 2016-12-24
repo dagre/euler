@@ -29,8 +29,8 @@ object Euler15 {
     // node to the corner is equal to the number of paths from the node to the right plus the
     // number of paths from the node to the bottom:
     // i.e. numPaths(x,y) = numPaths(x+1,y) + numPaths(x,y+1)
-    for (x <- Range(gridSize-1, -1, -1))
-      for (y <- Range(gridSize-1, -1, -1))
+    for (x <- (0 until gridSize).reverse)
+      for (y <- (0 until gridSize).reverse)
         grid(x)(y) = grid(x)(y+1) + grid(x+1)(y)
 
     // Return the number of paths from the top left node
