@@ -11,11 +11,29 @@ package org.dagre.euler
   */
 object Euler15 {
 
-  def apply(gridSize: Int): Long = numPaths(gridSize)(0,0)
+  def apply(gridSize: Int): Long = {
+    // This grid represents the number of paths from any given node to the bottom right corner
+    // e.g. grid(x)(y) = n means that there are n possible paths from (x,y) to the corner
+    val grid = Array.ofDim[Long](gridSize+1, gridSize+1)
 
-  def numPaths(gridSize: Int)(x: Int, y: Int): Long = {
-    if (x == gridSize || y == gridSize) 1
-    else numPaths(gridSize)(x+1,y) + numPaths(gridSize)(x,y+1)
+    // Initialize the edges to 1 (any point on the edge has only one path to the corner - simply
+    // follow the edge to the corner)
+    for (i <- 0 to gridSize) {
+      grid(i)(gridSize) = 1
+      grid(gridSize)(i) = 1
+    }
+
+    // Loop over the inner nodes (starting from those closest to the edges) and calculate the
+    // number of paths for each node based on the previous known nodes
+    // Since at each node you can either go right or down, the number of paths from any given
+    // node to the corner is equal to the number of paths from the node to the right plus the
+    // number of paths from the node to the bottom:
+    // i.e. numPaths(x,y) = numPaths(x+1,y) + numPaths(x,y+1)
+    for (x <- Range(gridSize-1, -1, -1))
+      for (y <- Range(gridSize-1, -1, -1))
+        grid(x)(y) = grid(x)(y+1) + grid(x+1)(y)
+
+    // Return the number of paths from the top left node
+    grid(0)(0)
   }
-
 }
