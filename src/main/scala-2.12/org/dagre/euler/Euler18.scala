@@ -24,27 +24,28 @@ object Euler18 {
   def apply(triangle: Seq[Seq[Int]]): Long = maximalPathSum(triangle)
 
   def maximalPathSum(triangle: Seq[Seq[Int]]): Long = {
-    // pair each element with the maximum path sum from that element to the bottom
-    val sums: mutable.Seq[mutable.Seq[(Int, Long)]] =
-      triangle.map(row => row.map(element => (element, 0L)).to[mutable.Seq]).to[mutable.Seq]
+    // Initialize the maximum path sum triangle, which will store the maximum path sum from
+    // each element to the bottom
+    val maxPathSum: mutable.Seq[mutable.Seq[Long]] =
+      triangle.map(row => row.map(_ => 0L).to[mutable.Seq]).to[mutable.Seq]
 
-    // initialize the bottom row's maximum sums as being the element itself
-    sums(sums.size-1) = sums.last.map(tuple => (tuple._1, tuple._1.toLong))
+    // Initialize the bottom row's maximum sums as being the value of the node itself
+    maxPathSum(maxPathSum.size-1) = maxPathSum.last.zipWithIndex.map(tuple => triangle.last(tuple._2).toLong)
 
-    // loop over the inner elements, setting their maximum sum as being the element
-    // itself, plus the maximum of the maximum sums of its adjacent nodes
-    // i.e. for a node(x)(y) = n, its maximum path sum = n + max(maxPathSum(x+1)(y), maxPathSum(x+1,y+1))
-    for (i <- (0 until sums.size-1).reverse) {
-      for (j <- sums(i).indices) {
-        val currentCell = sums(i)(j)
-        sums(i)(j) = (currentCell._1, adjacencies(j).map(index => sums(i+1)(index)._2).max + currentCell._1)
+    // loop over the inner elements, setting their maximum path sum as being the element itself,
+    // plus the maximum of the maximum path sums of its adjacent nodes in the row beneath
+    // i.e. maxPathSum(x)(y) = triangle(x)(y) + max(maxPathSum(x+1)(y), maxPathSum(x+1,y+1))
+    for (i <- (0 until maxPathSum.size-1).reverse) {
+      for (j <- maxPathSum(i).indices) {
+        val currentCellValue = triangle(i)(j)
+        maxPathSum(i)(j) = adjacencies(j).map(index => maxPathSum(i+1)(index)).max + currentCellValue
       }
     }
 
-    // return the maximum path sum of the root node
-    sums.head.head._2
+    // Return the maximum path sum of the root node
+    maxPathSum.head.head
   }
 
-
+  // Returns the indices of the nodes adjacent to this one, on the next row (downwards)
   def adjacencies(index: Int) = List(index, index+1)
 }
