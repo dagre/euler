@@ -44,4 +44,14 @@ object Utils {
     true
   }
 
+  /**
+    * Returns all the proper divisors of the given number. Instead of going through
+    * all numbers under n, it stops at sqrt(n) and for all divisors found, it also
+    * adds its pair (i.e. if k is a divisor, so is its pair n/k).
+    */
+  def properDivisors(n: Int): Seq[Int] =
+    1 :: (2 to math.sqrt(n).toInt).filter(n % _ == 0).flatMap(k => List(k, n / k)).toList
+
+  def divisors(n: Int): Seq[Int] = properDivisors(n) :+ n
+
 }

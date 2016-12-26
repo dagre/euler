@@ -24,17 +24,9 @@ object Euler21 {
     * problem description.
     */
   def isAmicable(a: Int): Boolean = {
-    def d(n: Int): Int = divisors(n).sum
+    def d(n: Int): Int = Utils.properDivisors(n).sum
     val b = d(a)
     a == d(b) && b != a
   }
-
-  /**
-    * Returns all the proper divisors of the given number. Instead of going through
-    * all numbers under n, it stops at sqrt(n) and for all divisors found, it also
-    * adds its pair (i.e. if k is a divisor, so is its pair n/k).
-    */
-  def divisors(n: Int): Seq[Int] =
-    1 :: (2 until math.sqrt(n).toInt).filter(n % _ == 0).flatMap(k => List(k, n / k)).toList
 
 }
