@@ -1,7 +1,6 @@
 package org.dagre.euler
 
 import scala.collection.mutable
-import scala.io.Source
 
 /**
   * Euler Problem 23 - Non-abundant sums
