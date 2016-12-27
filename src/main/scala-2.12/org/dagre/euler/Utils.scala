@@ -50,7 +50,7 @@ object Utils {
     * adds its pair (i.e. if k is a divisor, so is its pair n/k).
     */
   def properDivisors(n: Int): Seq[Int] =
-    1 :: (2 to math.sqrt(n).toInt).filter(n % _ == 0).flatMap(k => List(k, n / k)).toList
+    1 :: (2 to math.sqrt(n).toInt).filter(n % _ == 0).flatMap(k => List(k, n / k)).distinct.toList
 
   def divisors(n: Int): Seq[Int] = properDivisors(n) :+ n
 

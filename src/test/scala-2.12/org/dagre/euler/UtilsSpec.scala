@@ -52,6 +52,7 @@ class UtilsSpec extends FlatSpec with Matchers {
   }
 
   "Proper divisors" should "return all the proper divisors of the given number" in {
+    Utils.properDivisors(4) should contain only (1,2)
     Utils.properDivisors(6) should contain only (1,2,3)
     Utils.properDivisors(8) should contain only (1,2,4)
     Utils.properDivisors(15) should contain only (1,3,5)
@@ -59,6 +60,7 @@ class UtilsSpec extends FlatSpec with Matchers {
   }
 
   "Divisors" should "return all the divisors of the given number" in {
+    Utils.divisors(4) should contain only (1,2,4)
     Utils.divisors(6) should contain only (1,2,3,6)
     Utils.divisors(8) should contain only (1,2,4,8)
     Utils.divisors(15) should contain only (1,3,5,15)
