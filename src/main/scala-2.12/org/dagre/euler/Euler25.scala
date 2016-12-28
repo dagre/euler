@@ -35,7 +35,7 @@ object Euler25 {
     def fibonacci(n: BigInt): BigInt = fibonacciCache.getOrElseUpdate(n, fibonacci(n-1) + fibonacci(n-2))
 
     Stream.from(1).map(n => (fibonacci(n), n)).collectFirst{
-      case (x: BigInt, n: Int) if x.toString.length == numDigits => n
+      case (x,n) if x.toString.length == numDigits => n
     }.get
   }
 
