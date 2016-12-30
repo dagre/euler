@@ -18,39 +18,19 @@ import scala.collection.mutable
   */
 object Euler31 {
 
-  def apply(max:Int): Int = combinationsDynamic(max, Set(1,2,5,10,20,50,100,200)).size
+  def apply(max:Int): Int = numCombinations(max, List(1,2,5,10,20,50,100,200))
 
-  def combinationsDynamic(n: Int, denominations: Set[Int]): Set[Combination] = {
-    val combinationsForZero = Set(Combination(Map()))
-    val combinationsForOne = Set(Combination(Map(1 -> 1)))
-    val known = mutable.Map[Int, Set[Combination]](0 -> combinationsForZero, 1 -> combinationsForOne)
+  def numCombinations(n: Int, denominations: List[Int]): Int = {
+    val numCombinations = Array.ofDim[Int](n + 1)
+    numCombinations(0) = 1
 
-    for (i <- 2 to n) {
-      // The number of combinations for any value n can be found by going all possible
-      // denominations < n, and for each one, use one of that denomination, and compute
-      // the combinations of the new amount.
+    // Go over every denomination available, and for each one, update the number of combinations
+    // for all the amounts that are larger than this denomination, to include the combinations
+    // that include this denomination
+    for (i <- denominations)
+      for (j <- i to n)
+        numCombinations(j) = numCombinations(j) + numCombinations(j - i)
 
-      // For example, the combinations to make up 3 (from denominations, 1, 2, and 5):
-      // [1,2] are smaller than 3:
-      //  - taking 2, we are left with 3-2=1, which has 1 way to make it up => [2,1]
-      //  - taking 1, we are left with 3-1=2, which has 2 ways to make it up => [1,2], [1,1,1]
-
-      // The results are placed in a Combinations object and then in a set, which means
-      // that [2,1] == [1,2] and thus one of them is discarded. This leaves us with the
-      // solutions, [1,2] and [1,1,1].
-      known(i) = denominations.filter(_ <= i).flatMap(denomination => known(i - denomination).map(_ + denomination))
-    }
-
-    known(n)
-  }
-
-  case class Combination(elems: Map[Int, Int]) {
-    /** Returns a new combination which is the same as this,
-      * plus one additional value of the given denomination
-      */
-    def +(denomination: Int): Combination = {
-      val updatedDenominationCount = elems.getOrElse(denomination, 0) + 1
-      Combination(elems.updated(denomination, updatedDenominationCount))
-    }
+    numCombinations(n)
   }
 }
