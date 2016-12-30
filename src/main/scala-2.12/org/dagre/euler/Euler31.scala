@@ -18,40 +18,30 @@ import scala.collection.mutable
   */
 object Euler31 {
 
-  def apply(max:Int): Int = combinations(max, List(1,2,5,10,20,50,100,200)).size
+  def apply(max:Int): Int = combinationsDynamic(max, Set(1,2,5,10,20,50,100,200)).size
 
-  def combinations(n: Int, denominations: Seq[Int]): Set[Combination] = {
-    val zero = Set(Combination(Map()))
-    val one = Set(Combination(Map(1 -> 1)))
-    val known = mutable.Map(0 -> zero, 1 -> one)
+  def combinationsDynamic(n: Int, denominations: Set[Int]): Set[Combination] = {
+    val combinationsForZero = Set(Combination(Map()))
+    val combinationsForOne = Set(Combination(Map(1 -> 1)))
+    val known = mutable.Map[Int, Set[Combination]](0 -> combinationsForZero, 1 -> combinationsForOne)
 
-    def combinations(n: Int): Set[Combination] = {
+    for (i <- 2 to n) {
+      // The number of combinations for any value n can be found by going all possible
+      // denominations < n, and for each one, use one of that denomination, and compute
+      // the combinations of the new amount.
 
-      /** The number of combinations for any value n can be found by going all possible
-        * denominations < n, and for each one, use one of that denomination, and compute
-        * the combinations of the new amount.
-        *
-        * For example, the combinations to make up 3 (from denominations, 1, 2, and 5):
-        * [1,2] are smaller than 3:
-        *  - taking 2, we are left with 3-2=1, which has 1 way to make it up => [2,1]
-        *  - taking 1, we are left with 3-1=2, which has 2 ways to make it up => [1,2], [1,1,1]
-        *
-        * The results are placed in a Combinations object and then in a set, which means
-        * that [2,1] == [1,2] and thus one of them is discarded. This leaves us with the
-        * solutions, [1,2] and [1,1,1].
-        */
-      def calculateCombinationsForTotal(n: Int): Set[Combination] =
-        denominations.filter(_ <= n)
-          .flatMap(denomination => combinations(n - denomination).map(_ + denomination)).toSet
+      // For example, the combinations to make up 3 (from denominations, 1, 2, and 5):
+      // [1,2] are smaller than 3:
+      //  - taking 2, we are left with 3-2=1, which has 1 way to make it up => [2,1]
+      //  - taking 1, we are left with 3-1=2, which has 2 ways to make it up => [1,2], [1,1,1]
 
-      known.getOrElseUpdate(n, calculateCombinationsForTotal(n))
+      // The results are placed in a Combinations object and then in a set, which means
+      // that [2,1] == [1,2] and thus one of them is discarded. This leaves us with the
+      // solutions, [1,2] and [1,1,1].
+      known(i) = denominations.filter(_ <= i).flatMap(denomination => known(i - denomination).map(_ + denomination))
     }
 
-    // calculate (and cache) the combinations for lower values first, so they are
-    // already cached when we need them for the required value
-    for (i <- 2 to n) combinations(i)
-
-    combinations(n)
+    known(n)
   }
 
   case class Combination(elems: Map[Int, Int]) {
