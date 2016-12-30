@@ -21,6 +21,6 @@ package org.dagre.euler
 object Euler29 {
 
   def apply(max: Int): Long =
-    (2 to max).flatMap(a => (2 to max).flatMap(b => List(BigInt(a).pow(b)))).distinct.size
+    (2 to max).flatMap(a => (2 to max).map(b => BigInt(a).pow(b))).distinct.size
 
 }
