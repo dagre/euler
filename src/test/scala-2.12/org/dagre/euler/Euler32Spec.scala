@@ -14,5 +14,7 @@ class Euler32Spec extends FlatSpec with Matchers {
     Euler32.isPandigital(2,3,4,1,7,5,6,9,8) should be (true)
     Euler32.isPandigital(1233456789) should be (false)
     Euler32.isPandigital(123,345,6789) should be (false)
+    Euler32.isPandigital(123) should be (false)
+    Euler32.isPandigital(1010954) should be (false)
   }
 }
