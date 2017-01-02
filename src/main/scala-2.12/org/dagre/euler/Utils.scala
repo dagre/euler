@@ -54,4 +54,8 @@ object Utils {
 
   def divisors(n: Int): Seq[Int] = properDivisors(n) :+ n
 
+  def gcd(x: Int, y: Int): Int = {
+    val commonDivisors = divisors(x) intersect divisors(y)
+    if (commonDivisors.isEmpty) 1 else commonDivisors.max
+  }
 }
