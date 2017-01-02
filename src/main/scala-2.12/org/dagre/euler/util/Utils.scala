@@ -1,4 +1,4 @@
-package org.dagre.euler
+package org.dagre.euler.util
 
 /**
   * Common utility methods

@@ -1,4 +1,4 @@
-package org.dagre.euler
+package org.dagre.euler.util
 
 import org.scalatest.{FlatSpec, Matchers}
 
@@ -66,4 +66,12 @@ class UtilsSpec extends FlatSpec with Matchers {
     Utils.divisors(15) should contain only (1,3,5,15)
     Utils.divisors(18) should contain only (1,2,3,6,9,18)
   }
+
+  "GCD" should "return the greatest common divisor of the given numbers" in {
+    Utils.gcd(32, 16) should be (16)
+    Utils.gcd(99, 9) should be (9)
+    Utils.gcd(99, 18) should be (9)
+    Utils.gcd(25, 17) should be (1)
+  }
+
 }

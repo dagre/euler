@@ -1,5 +1,7 @@
 package org.dagre.euler
 
+import org.dagre.euler.util.Utils
+
 /**
   * Euler Problem 7 - 10001st prime
   *

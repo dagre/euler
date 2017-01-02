@@ -1,7 +1,5 @@
 package org.dagre.euler.util
 
-import org.dagre.euler.Utils
-
 /**
   * Convenience class for representing a fractional number
   *

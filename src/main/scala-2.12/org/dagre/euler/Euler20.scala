@@ -3,6 +3,8 @@ package org.dagre.euler
 import java.time.temporal.TemporalAdjusters
 import java.time.{DayOfWeek, LocalDate}
 
+import org.dagre.euler.util.Utils
+
 /**
   * Euler Problem 20 - Factorial digit sum
   *
